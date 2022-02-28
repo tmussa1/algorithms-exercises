@@ -8,6 +8,7 @@ public class Graph implements IGraph {
     @Override // TODO - discuss modularity
     public List<Edge> generate0DimensionalGraph(int numVertices) {
 
+        // Used sets to avoid duplication
         Set<Edge> edges = new HashSet<>();
 
         // Cut the graph by a constant factor of half
