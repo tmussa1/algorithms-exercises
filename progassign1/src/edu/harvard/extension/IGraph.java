@@ -1,10 +1,10 @@
 package edu.harvard.extension;
 
-import java.util.Set;
+import java.util.List;
 
 public interface IGraph {
 
     // Used sets to avoid duplication
-    Set<Edge> generate0DimensionalGraph(int numVertices); // TODO - pass dimensions
-    Set<Edge> generateHigherDimensionalGraph(int numVertices, int dimension);
+    List<Edge> generate0DimensionalGraph(int numVertices); // TODO - pass dimensions
+    List<Edge> generateHigherDimensionalGraph(int numVertices, int dimension);
 }

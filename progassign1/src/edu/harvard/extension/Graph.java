@@ -5,8 +5,8 @@ import java.util.*;
 public class Graph implements IGraph {
 
 
-    @Override
-    public Set<Edge> generate0DimensionalGraph(int numVertices) {
+    @Override // TODO - discuss modularity
+    public List<Edge> generate0DimensionalGraph(int numVertices) {
 
         Set<Edge> edges = new HashSet<>();
 
@@ -15,16 +15,19 @@ public class Graph implements IGraph {
             for(int j = 0; j < i; j++){
                 // TODO - reseed
                 Edge edge = new Edge(i, j);
-                edge.setWeight(this.newRandom());
-                edges.add(edge);
+
+                if(!edges.contains(edge)){
+                    edge.setWeight(this.newRandom());
+                    edges.add(edge);
+                }
             }
         }
 
-        return edges;
+        return new ArrayList<>(edges);
     }
 
     @Override
-    public Set<Edge> generateHigherDimensionalGraph(int numVertices, int dimension) {
+    public List<Edge> generateHigherDimensionalGraph(int numVertices, int dimension) {
 
         Set<Edge> edges = new HashSet<>();
 
@@ -33,14 +36,17 @@ public class Graph implements IGraph {
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
                 Edge edge = new Edge(i, j);
-                edge.setWeight(this.calculateEuclideanDistance(dimension,
-                        vertices[i], vertices[j]));
-                edges.add(edge); // TODO - optimization
+
+                if(!edges.contains(edge)) {
+                    edge.setWeight(this.calculateEuclideanDistance(dimension,
+                            vertices[i], vertices[j]));
+                    edges.add(edge); // TODO - optimization
+                }
             }
         }
 
 
-        return edges;
+        return new ArrayList<>(edges);
     }
 
     private double[][] populateVertexMatrix(int numVertices, int dimensions){
