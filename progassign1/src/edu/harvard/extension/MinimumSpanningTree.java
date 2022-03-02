@@ -16,7 +16,7 @@ public class MinimumSpanningTree implements IMinimumSpanningTree {
         int edgeListLength = edgeList.size();
         Node [] nodes = new Node[numVertices];
 
-        mergeSort.mergeSort(edgeList, 0, edgeListLength);
+        mergeSort.mergeSort(edgeList, 0, edgeListLength - 1);
 
         for(int i = 0; i < numVertices; i++){
             nodes[i] = disjointSet.makeSet(i);
@@ -28,7 +28,7 @@ public class MinimumSpanningTree implements IMinimumSpanningTree {
                 spanningTreeEdges.add(edgeList.get(i));
                 disjointSet.union(nodes[edgeList.get(i).getVertex1()],
                         nodes[edgeList.get(i).getVertex2()]);
-                if(spanningTreeEdges.size() >= numVertices - 1){
+                if(spanningTreeEdges.size() >= numVertices){
                     break;
                 }
             }
