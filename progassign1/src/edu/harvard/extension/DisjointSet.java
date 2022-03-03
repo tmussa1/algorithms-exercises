@@ -18,9 +18,8 @@ public class DisjointSet implements IDisjointSet {
     public Node findNodeParent(Node node) {
         if(!node.equals(node.getParent())){
             node.setParent(findNodeParent(node.getParent()));
-            return node.getParent();
         }
-        return node;
+        return node.getParent();
     }
 
     @Override

@@ -36,7 +36,7 @@ public class MinimumSpanningTree implements IMinimumSpanningTree {
                 spanningTreeEdges.add(edgeList.get(i));
                 disjointSet.union(nodes[edgeList.get(i).getVertex1()],
                         nodes[edgeList.get(i).getVertex2()]);
-                if(spanningTreeEdges.size() >= numVertices){
+                if(spanningTreeEdges.size() >= numVertices - 1){
                     break;
                 }
             }

@@ -38,14 +38,19 @@ public class Graph implements IGraph {
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
                 // TODO - reseed
-                Edge edge = new Edge(i, j);
-
                 double weight = this.newRandom();
 
+                if(weight > Math.abs(throwOutBeyond)){
+                    continue;
+                }
+
                 // Add it if in bound and the vertices hasn't been generated before
-                if(weight <= throwOutBeyond && !edges.contains(edge)){
-                    edge.setWeight(weight);
-                    edges.add(edge);
+                if(weight <= throwOutBeyond){
+                    Edge edge = new Edge(i, j);
+                    if(!edges.contains(edge)){
+                        edge.setWeight(weight);
+                        edges.add(edge);
+                    }
                 }
             }
         }
@@ -62,29 +67,42 @@ public class Graph implements IGraph {
     @Override
     public List<Edge> generateHigherDimensionalGraph(int numVertices, int dimension) {
 
-        Set<Edge> edges = new HashSet<>();
+        Edge [] edges = new Edge[numVertices * (numVertices - 1) / 2];
         double throwOutBeyond = throwOutBeyond(numVertices, dimension);
 
         double[][] vertices = this.populateVertexMatrix(numVertices, dimension); // Throw out an edge beyond this value
+        int count = 0;
+        Edge edge = new Edge();;
 
         // Cut the graph by a constant factor of half by considering only the bottom triangle
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
-                Edge edge = new Edge(i, j);
+
+                for(int k = 0; k < dimension; k++){
+                    if(Math.abs(vertices[i][k] - vertices[j][k]) > Math.abs(throwOutBeyond)){
+                        continue;
+                    }
+                }
 
                 double weight = this.calculateEuclideanDistance(dimension,
                         vertices[i], vertices[j]);
 
                 // Add it if in bound and the vertices hasn't been generated before
-                if(weight <= throwOutBeyond && !edges.contains(edge)) {
-                    edge.setWeight(weight);
-                    edges.add(edge);
+                if(weight <= throwOutBeyond) {
+//                      edge = new Edge(i, j);
+                	edge.setVertex1(i);
+                	edge.setVertex2(j);
+//                    if(!edges.contains(edge)){
+                        edge.setWeight(weight);
+                        edges[count++] = edge;
+//                    }
+//                      System.gc();
                 }
             }
         }
 
 
-        return new ArrayList<>(edges);
+        return Arrays.asList(Arrays.copyOfRange(edges, 0, count));
     }
 
     /**
