@@ -3,6 +3,9 @@ package edu.harvard.extension;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Implements Kruskal's algorithm to find minimum spanning tree
+ */
 public class MinimumSpanningTree implements IMinimumSpanningTree {
 
     private static IDisjointSet disjointSet = new DisjointSet();
@@ -16,12 +19,17 @@ public class MinimumSpanningTree implements IMinimumSpanningTree {
         int edgeListLength = edgeList.size();
         Node [] nodes = new Node[numVertices];
 
+        // Sort edges by weight
         mergeSort.mergeSort(edgeList, 0, edgeListLength - 1);
 
+        // Make an individual set for each node
         for(int i = 0; i < numVertices; i++){
             nodes[i] = disjointSet.makeSet(i);
         }
 
+        /**
+         * Combine edges if they don't form a cycle
+         */
         for(int i = 0; i < edgeListLength; i++){
             if(disjointSet.findNodeParent(nodes[edgeList.get(i).getVertex1()])
                     != disjointSet.findNodeParent(nodes[edgeList.get(i).getVertex2()])){

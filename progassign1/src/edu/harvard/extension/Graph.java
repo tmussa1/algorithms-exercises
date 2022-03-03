@@ -2,28 +2,49 @@ package edu.harvard.extension;
 
 import java.util.*;
 
+/**
+ * Contains methods that generate the graphs
+ */
 public class Graph implements IGraph {
 
-
+    /**
+     * Driver method to generate graphs
+     * @param numVertices
+     * @param dimension
+     * @return List<Edge>
+     */
     @Override
     public List<Edge> generateGraphDriver(int numVertices, int dimension) {
-        return dimension == 0 ? generate0DimensionalGraph(numVertices) : generateHigherDimensionalGraph(numVertices, dimension);
+        if(dimension == 0  || dimension == 2 || dimension == 3 || dimension == 4){
+            return dimension == 0 ? generate0DimensionalGraph(numVertices) : generateHigherDimensionalGraph(numVertices, dimension);
+        }
+        throw new RuntimeException("DImensions are invalid");
     }
 
-    @Override // TODO - discuss modularity
+    /**
+     * Generates 0 dimensional grpah. Throws out edges beyond what is predicted
+     * by the regression line of the max weight claimed by the spanning tree
+     * @param numVertices
+     * @return List<Edge>
+     */
+    @Override
     public List<Edge> generate0DimensionalGraph(int numVertices) {
 
         // Used sets to avoid duplication
         Set<Edge> edges = new HashSet<>();
+        double throwOutBeyond = throwOutBeyond(numVertices, 0); // Throw out an edge beyond this value
 
-        // Cut the graph by a constant factor of half
+        // Cut the graph by a constant factor of half by considering only the bottom triangle
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
                 // TODO - reseed
                 Edge edge = new Edge(i, j);
 
-                if(!edges.contains(edge)){
-                    edge.setWeight(this.newRandom());
+                double weight = this.newRandom();
+
+                // Add it if in bound and the vertices hasn't been generated before
+                if(weight <= throwOutBeyond && !edges.contains(edge)){
+                    edge.setWeight(weight);
                     edges.add(edge);
                 }
             }
@@ -32,21 +53,32 @@ public class Graph implements IGraph {
         return new ArrayList<>(edges);
     }
 
+    /**
+     * Generates graph for dimensions 2 through 4
+     * @param numVertices
+     * @param dimension
+     * @return List<Edge>
+     */
     @Override
     public List<Edge> generateHigherDimensionalGraph(int numVertices, int dimension) {
 
         Set<Edge> edges = new HashSet<>();
+        double throwOutBeyond = throwOutBeyond(numVertices, dimension);
 
-        double[][] vertices = this.populateVertexMatrix(numVertices, dimension);
+        double[][] vertices = this.populateVertexMatrix(numVertices, dimension); // Throw out an edge beyond this value
 
+        // Cut the graph by a constant factor of half by considering only the bottom triangle
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
                 Edge edge = new Edge(i, j);
 
-                if(!edges.contains(edge)) {
-                    edge.setWeight(this.calculateEuclideanDistance(dimension,
-                            vertices[i], vertices[j]));
-                    edges.add(edge); // TODO - optimization
+                double weight = this.calculateEuclideanDistance(dimension,
+                        vertices[i], vertices[j]);
+
+                // Add it if in bound and the vertices hasn't been generated before
+                if(weight <= throwOutBeyond && !edges.contains(edge)) {
+                    edge.setWeight(weight);
+                    edges.add(edge);
                 }
             }
         }
@@ -55,6 +87,12 @@ public class Graph implements IGraph {
         return new ArrayList<>(edges);
     }
 
+    /**
+     * Popluates the weights of the vertices
+     * @param numVertices
+     * @param dimensions
+     * @return vertices with weight populated
+     */
     private double[][] populateVertexMatrix(int numVertices, int dimensions){
 
         double [] [] vertices = new double[numVertices][dimensions];
@@ -68,23 +106,40 @@ public class Graph implements IGraph {
         return vertices;
     }
 
+    /**
+     * Random number generator
+     * @return rand number between 0 and 1
+     */
     private double newRandom() {
         return new Random().nextDouble();
     }
 
+    /**
+     * Calculates Euclidean distance for higher dimensions
+     * @param dimension
+     * @param vertex1
+     * @param vertex2
+     * @return
+     */
     private double calculateEuclideanDistance(int dimension, double [] vertex1, double [] vertex2) {
-
         double total = 0.0;
-
         for(int i = 0; i < dimension; i++){
             total += Math.pow((vertex1[i] - vertex2[i]), 2);
         }
-
         return total;
     }
 
+    /**
+     * Anything beyond the weight returned here is unlikely to be
+     * part of the spanning tree and ignored
+     * @param numVertices
+     * @param dimension
+     * @return weight
+     */
     private double throwOutBeyond(int numVertices, int dimension){
 
+        // These values were experimentally calculated
+        // They depend on both dimension and number of vertices
         if(dimension == 2){
             return 1.1548245759154 + (0.00021418835519582 * numVertices);
         } else if(dimension == 3){

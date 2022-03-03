@@ -2,6 +2,9 @@ package edu.harvard.extension;
 
 import java.util.Objects;
 
+/**
+ * Contains the edges. Two vertices and a weight
+ */
 public class Edge {
 
     private Integer vertex1;

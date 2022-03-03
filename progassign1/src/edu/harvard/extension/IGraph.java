@@ -2,6 +2,9 @@ package edu.harvard.extension;
 
 import java.util.List;
 
+/**
+ * Interface for graphs
+ */
 public interface IGraph {
 
     List<Edge> generateGraphDriver(int numVertices, int dimension);

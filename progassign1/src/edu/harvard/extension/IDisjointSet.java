@@ -1,5 +1,8 @@
 package edu.harvard.extension;
 
+/**
+ * Interface for disjoint sets
+ */
 public interface IDisjointSet {
 
     Node makeSet(int val);

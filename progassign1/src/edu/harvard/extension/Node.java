@@ -1,5 +1,8 @@
 package edu.harvard.extension;
 
+/**
+ * Node used to store the values needed for union find to operate
+ */
 public class Node {
 
     private int val;

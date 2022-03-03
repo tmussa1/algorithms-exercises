@@ -1,6 +1,5 @@
 package edu.harvard.extension;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -9,6 +8,12 @@ import java.util.List;
  */
 public class MergeSort implements IMergeSort {
 
+    /**
+     * Driver method for merge sort
+     * @param edges
+     * @param left
+     * @param right
+     */
     @Override
     public void mergeSort(List<Edge> edges, int left, int right) {
 
@@ -20,6 +25,13 @@ public class MergeSort implements IMergeSort {
         }
     }
 
+    /**
+     * Combines the edges to be sorted by weight
+     * @param edges
+     * @param left
+     * @param middle
+     * @param right
+     */
     @Override
     public void merge(List<Edge> edges, int left, int middle, int right) {
 
