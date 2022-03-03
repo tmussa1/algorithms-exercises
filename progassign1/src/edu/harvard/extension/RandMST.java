@@ -29,7 +29,7 @@ public class RandMST {
                 long startTime = System.currentTimeMillis(), endTime = 0L;
 
                 // TODO - call with all dimensions, comment code
-                List<Edge> graphs = graph.generateHigherDimensionalGraph(j, dimension);
+                List<Edge> graphs = graph.generate0DimensionalGraph(j);
 
                 endTime = System.currentTimeMillis();
 

@@ -5,6 +5,11 @@ import java.util.*;
 public class Graph implements IGraph {
 
 
+    @Override
+    public List<Edge> generateGraphDriver(int numVertices, int dimension) {
+        return dimension == 0 ? generate0DimensionalGraph(numVertices) : generateHigherDimensionalGraph(numVertices, dimension);
+    }
+
     @Override // TODO - discuss modularity
     public List<Edge> generate0DimensionalGraph(int numVertices) {
 
@@ -79,6 +84,7 @@ public class Graph implements IGraph {
     }
 
     private double throwOutBeyond(int numVertices, int dimension){
+
         if(dimension == 2){
             return 1.1548245759154 + (0.00021418835519582 * numVertices);
         } else if(dimension == 3){
@@ -86,6 +92,7 @@ public class Graph implements IGraph {
         } else if(dimension == 4){
             return 1.7811528561393 + (0.00032871934623935 * numVertices);
         }
-        return 0.0;
+
+        return 0.92937887536493 + (3.8098051419887 * Math.pow(10, -5) * numVertices);
     }
 }
