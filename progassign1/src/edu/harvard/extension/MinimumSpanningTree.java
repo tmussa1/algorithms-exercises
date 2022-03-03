@@ -1,6 +1,7 @@
 package edu.harvard.extension;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -14,10 +15,11 @@ public class MinimumSpanningTree implements IMinimumSpanningTree {
 
     @Override
     public List<Edge> generateMinimumSpanningTree(int numVertices, int dimension, List<Edge> edgeList) {
-
-        List<Edge> spanningTreeEdges = new ArrayList<>();
+      
         int edgeListLength = edgeList.size();
+        Edge [] spanningTreeEdges = new Edge[numVertices - 1];
         Node [] nodes = new Node[numVertices];
+        int count = 0;
 
         // Sort edges by weight
         mergeSort.mergeSort(edgeList, 0, edgeListLength - 1);
@@ -33,15 +35,15 @@ public class MinimumSpanningTree implements IMinimumSpanningTree {
         for(int i = 0; i < edgeListLength; i++){
             if(disjointSet.findNodeParent(nodes[edgeList.get(i).getVertex1()])
                     != disjointSet.findNodeParent(nodes[edgeList.get(i).getVertex2()])){
-                spanningTreeEdges.add(edgeList.get(i));
+                spanningTreeEdges[count++] = edgeList.get(i);
                 disjointSet.union(nodes[edgeList.get(i).getVertex1()],
                         nodes[edgeList.get(i).getVertex2()]);
-                if(spanningTreeEdges.size() >= numVertices - 1){
+                if(count > numVertices - 1){
                     break;
                 }
             }
         }
 
-        return spanningTreeEdges;
+        return Arrays.asList(spanningTreeEdges);
     }
 }

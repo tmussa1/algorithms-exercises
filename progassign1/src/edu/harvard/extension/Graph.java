@@ -72,7 +72,7 @@ public class Graph implements IGraph {
 
         double[][] vertices = this.populateVertexMatrix(numVertices, dimension); // Throw out an edge beyond this value
         int count = 0;
-        Edge edge = new Edge();;
+        Edge edge = null;
 
         // Cut the graph by a constant factor of half by considering only the bottom triangle
         for(int i = 0; i < numVertices; i++){
@@ -89,14 +89,9 @@ public class Graph implements IGraph {
 
                 // Add it if in bound and the vertices hasn't been generated before
                 if(weight <= throwOutBeyond) {
-//                      edge = new Edge(i, j);
-                	edge.setVertex1(i);
-                	edge.setVertex2(j);
-//                    if(!edges.contains(edge)){
-                        edge.setWeight(weight);
-                        edges[count++] = edge;
-//                    }
-//                      System.gc();
+                	edge = new Edge(i, j);
+                    edge.setWeight(weight);
+                    edges[count++] = edge;
                 }
             }
         }
