@@ -77,4 +77,15 @@ public class Graph implements IGraph {
 
         return total;
     }
+
+    private double throwOutBeyond(int numVertices, int dimension){
+        if(dimension == 2){
+            return 1.1548245759154 + (0.00021418835519582 * numVertices);
+        } else if(dimension == 3){
+            return 1.4905761673706 + (0.00029932231431746 * numVertices);
+        } else if(dimension == 4){
+            return 1.7811528561393 + (0.00032871934623935 * numVertices);
+        }
+        return 0.0;
+    }
 }
