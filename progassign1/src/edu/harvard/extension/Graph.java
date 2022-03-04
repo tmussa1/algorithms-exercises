@@ -101,7 +101,7 @@ public class Graph implements IGraph {
     }
 
     /**
-     * Popluates the weights of the vertices
+     * Populates the weights of the vertices
      * @param numVertices
      * @param dimensions
      * @return vertices with weight populated
