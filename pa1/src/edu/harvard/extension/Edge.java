@@ -35,14 +35,6 @@ public class Edge {
         this.weight = weight;
     }
 
-    public void setVertex1(Integer vertex1) {
-        this.vertex1 = vertex1;
-    }
-
-    public void setVertex2(Integer vertex2) {
-        this.vertex2 = vertex2;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

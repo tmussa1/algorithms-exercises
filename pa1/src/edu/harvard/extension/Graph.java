@@ -30,28 +30,26 @@ public class Graph implements IGraph {
     @Override
     public List<Edge> generate0DimensionalGraph(int numVertices) {
 
-        // Used sets to avoid duplication
         Edge [] edges = new Edge[numVertices * (numVertices - 1) / 2];
         double throwOutBeyond = throwOutBeyond(numVertices, 0); // Throw out an edge beyond this value
         int count = 0;
+
         // Cut the graph by a constant factor of half by considering only the bottom triangle
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
                 // TODO - reseed
                 double weight = this.newRandom();
 
-//                if(weight > Math.abs(throwOutBeyond)){
-//                    continue;
-//                }
+                if(weight > Math.abs(throwOutBeyond)){
+                    continue;
+                }
 
                 // Add it if in bound and the vertices hasn't been generated before
-//                if(weight <= throwOutBeyond){
+                if(weight <= throwOutBeyond){
                     Edge edge = new Edge(i, j);
-//                    if(!edges.contains(edge)){
-                        edge.setWeight(weight);
-                edges[count++] = edge;
-//                    }
-//                }
+                    edge.setWeight(weight);
+                    edges[count++] = edge;
+                }
             }
         }
 
@@ -70,7 +68,8 @@ public class Graph implements IGraph {
         Edge [] edges = new Edge[numVertices * (numVertices - 1) / 2];
         double throwOutBeyond = throwOutBeyond(numVertices, dimension);
 
-        double[][] vertices = this.populateVertexMatrix(numVertices, dimension); // Throw out an edge beyond this value
+        // Throw out an edge beyond this value
+        double[][] vertices = this.populateVertexMatrix(numVertices, dimension);
         int count = 0;
         Edge edge = null;
 
@@ -78,21 +77,21 @@ public class Graph implements IGraph {
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
 
-//                for(int k = 0; k < dimension; k++){
-//                    if(Math.abs(vertices[i][k] - vertices[j][k]) > Math.abs(throwOutBeyond)){
-//                        continue;
-//                    }
-//                }
+                for(int k = 0; k < dimension; k++){
+                    if(Math.abs(vertices[i][k] - vertices[j][k]) > Math.abs(throwOutBeyond)){
+                        continue;
+                    }
+                }
 
                 double weight = this.calculateEuclideanDistance(dimension,
                         vertices[i], vertices[j]);
 
                 // Add it if in bound and the vertices hasn't been generated before
-//               if(weight <= throwOutBeyond) {
+               if(weight <= throwOutBeyond) {
                 	edge = new Edge(i, j);
                     edge.setWeight(weight);
                     edges[count++] = edge;
-//                }
+               }
             }
         }
 
@@ -154,13 +153,24 @@ public class Graph implements IGraph {
         // These values were experimentally calculated
         // They depend on both dimension and number of vertices
         if(dimension == 2){
-            return (0.80529 * Math.pow(numVertices, 2)) + (0.0065 * numVertices) - (4.0 * Math.pow(10, -5));
+            return  (0.90166495885347242) +
+                    (1.9703946965186929 * Math.pow(10, -3) * numVertices) -
+                    (4.7844966814161598 * Math.pow(10, -6) * numVertices * numVertices);
         } else if(dimension == 3){
-            return 1.4905761673706 + (0.00029932231431746 * numVertices);
+            return  (0.99494038957085906) +
+                    (3.7949020641474132 * Math.pow(10, -3) * numVertices) -
+                    (1.9296136181377216 * Math.pow(10, -5) * numVertices * numVertices) +
+                    (3.2498446060161502 * Math.pow(10, -8) * numVertices * numVertices * numVertices);
         } else if(dimension == 4){
-            return 1.7811528561393 + (0.00032871934623935 * numVertices);
+            return  (1.1144164132723846) +
+                    (3.6393587158792796 * Math.pow(10, -3) * numVertices) -
+                    (1.7384028258968941 * Math.pow(10, -5) * numVertices * numVertices) +
+                    (2.7652157861328113 * Math.pow(10, -8) * numVertices * numVertices * numVertices);
         }
 
-        return 0.92937887536493 + (3.8098051419887 * Math.pow(10, -5) * numVertices);
+        return  (0.89581146548621804) +
+                (1.8269286203337126 * Math.pow(10, -3) * numVertices) -
+                (9.9612573963010997 * Math.pow(10, -6) * numVertices * numVertices) +
+                (1.6586622134495306 * Math.pow(10, -8) * numVertices * numVertices * numVertices);
     }
 }
