@@ -16,7 +16,7 @@ public class RandMST {
     public static void main(String[] args) {
         int numTrials = 20000; // TODO - get as arg, write to file, come up with formula, run out of heap spaces and threw out edges
         int numVertices = 1000; // TODO - estimate runtime, run 0 d and flag, take command line arguments
-        int dimension = 4;
+        int dimension = 0;
 
         IGraph graph = new Graph();
         IMinimumSpanningTree mst = new MinimumSpanningTree();

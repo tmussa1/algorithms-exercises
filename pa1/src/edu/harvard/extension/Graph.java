@@ -18,7 +18,7 @@ public class Graph implements IGraph {
         if(dimension == 0  || dimension == 2 || dimension == 3 || dimension == 4){
             return dimension == 0 ? generate0DimensionalGraph(numVertices) : generateHigherDimensionalGraph(numVertices, dimension);
         }
-        throw new RuntimeException("DImensions are invalid");
+        throw new RuntimeException("Dimensions are invalid");
     }
 
     /**
@@ -31,31 +31,31 @@ public class Graph implements IGraph {
     public List<Edge> generate0DimensionalGraph(int numVertices) {
 
         // Used sets to avoid duplication
-        Set<Edge> edges = new HashSet<>();
+        Edge [] edges = new Edge[numVertices * (numVertices - 1) / 2];
         double throwOutBeyond = throwOutBeyond(numVertices, 0); // Throw out an edge beyond this value
-
+        int count = 0;
         // Cut the graph by a constant factor of half by considering only the bottom triangle
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
                 // TODO - reseed
                 double weight = this.newRandom();
 
-                if(weight > Math.abs(throwOutBeyond)){
-                    continue;
-                }
+//                if(weight > Math.abs(throwOutBeyond)){
+//                    continue;
+//                }
 
                 // Add it if in bound and the vertices hasn't been generated before
-                if(weight <= throwOutBeyond){
+//                if(weight <= throwOutBeyond){
                     Edge edge = new Edge(i, j);
-                    if(!edges.contains(edge)){
+//                    if(!edges.contains(edge)){
                         edge.setWeight(weight);
-                        edges.add(edge);
-                    }
-                }
+                edges[count++] = edge;
+//                    }
+//                }
             }
         }
 
-        return new ArrayList<>(edges);
+        return Arrays.asList(Arrays.copyOfRange(edges, 0, count));
     }
 
     /**
