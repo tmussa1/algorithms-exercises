@@ -15,15 +15,15 @@ public class RandMST {
 
     public static void main(String[] args) {
         int numTrials = 20000; // TODO - get as arg, write to file, come up with formula, run out of heap spaces and threw out edges
-        int numVertices = 1000; // TODO - estimate runtime, run 0 d and flag, take command line arguments
-        int dimension = 0;
+        int numVertices = 262144; // TODO - estimate runtime, run 0 d and flag, take command line arguments
+        int dimension = 2;
 
         IGraph graph = new Graph();
         IMinimumSpanningTree mst = new MinimumSpanningTree();
 
         double total;
 
-        for(int j = 5; j < numVertices; j = j + 5) {
+        for(int j = 5; j <= 300; j = j + 5) {
             total = 0.0;
             long startTime = System.currentTimeMillis(), endTime = 0L;
             for(int i = 0; i < numTrials; i++){

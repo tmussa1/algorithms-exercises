@@ -44,6 +44,6 @@ public class MinimumSpanningTree implements IMinimumSpanningTree {
             }
         }
 
-        return Arrays.asList(spanningTreeEdges);
+        return Arrays.asList(Arrays.copyOfRange(spanningTreeEdges, 0, count));
     }
 }
