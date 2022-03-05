@@ -39,10 +39,10 @@ public class Graph implements IGraph {
             for(int j = 0; j < i; j++){
                 // TODO - reseed
                 double weight = this.newRandom();
-
-                if(weight > Math.abs(throwOutBeyond)){
-                    continue;
-                }
+//
+//                if(weight > Math.abs(throwOutBeyond)){
+//                    continue;
+//                }
 
                 // Add it if in bound and the vertices hasn't been generated before
                 if(weight <= throwOutBeyond){
@@ -76,11 +76,11 @@ public class Graph implements IGraph {
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
 
-                for(int k = 0; k < dimension; k++){
-                    if(Math.abs(vertices[i][k] - vertices[j][k]) > Math.abs(throwOutBeyond)){
-                        continue;
-                    }
-                }
+//                for(int k = 0; k < dimension; k++){
+//                    if(Math.abs(vertices[i][k] - vertices[j][k]) > Math.abs(throwOutBeyond)){
+//                        continue;
+//                    }
+//                }
 
                 double weight = this.calculateEuclideanDistance(dimension,
                         vertices[i], vertices[j]);
@@ -152,9 +152,10 @@ public class Graph implements IGraph {
         // These values were experimentally calculated
         // They depend on both dimension and number of vertices
         if(dimension == 2){
-            return  (0.90166495885347242) +
-                    (1.9703946965186929 * Math.pow(10, -3) * numVertices) -
-                    (4.7844966814161598 * Math.pow(10, -6) * numVertices * numVertices);
+            return  (0.84990957989574656) +
+                    (4.0844138749925336 * Math.pow(10, -3) * numVertices) -
+                    (2.3384161945512693 * Math.pow(10, -5) * numVertices * numVertices) +
+                    (4.3993209873393909 * Math.pow(10, -8) * numVertices * numVertices * numVertices);
         } else if(dimension == 3){
             return  (0.99494038957085906) +
                     (3.7949020641474132 * Math.pow(10, -3) * numVertices) -

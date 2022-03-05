@@ -14,7 +14,7 @@ public class RandMST {
     }
 
     public static void main(String[] args) {
-        int numTrials = 20000; // TODO - get as arg, write to file, come up with formula, run out of heap spaces and threw out edges
+        int numTrials = 1000; // TODO - get as arg, write to file, come up with formula, run out of heap spaces and threw out edges
         int numVertices = 262144; // TODO - estimate runtime, run 0 d and flag, take command line arguments
         int dimension = 2;
 
@@ -23,20 +23,20 @@ public class RandMST {
 
         double total;
 
-        for(int j = 5; j <= 300; j = j + 5) {
+        for(int j = 16; j <= numVertices; j *= 2) {
             total = 0.0;
             long startTime = System.currentTimeMillis(), endTime = 0L;
             for(int i = 0; i < numTrials; i++){
                 // TODO - call with all dimensions, comment code
                 List<Edge> graphs = graph.generateGraphDriver(j, dimension);
                 List<Edge> spanningTrees = mst.generateMinimumSpanningTree(j, dimension, graphs);
-//                total += calculateTotalWeight(spanningTrees);
-                total += calculateMaxWeight(spanningTrees);
+                total += calculateTotalWeight(spanningTrees);
+//                total += calculateMaxWeight(spanningTrees);
             }
-            System.out.println(j + "," + (total / numTrials));
+//            System.out.println(j + "," + (total / numTrials));
             endTime = System.currentTimeMillis();
-//            System.out.println((total / numTrials) + "," + j + "," + numTrials + "," + dimension + "," +
-//                    ((endTime - startTime) / 1000));
+            System.out.println((total / numTrials) + "," + j + "," + numTrials + "," + dimension + "," +
+                    ((endTime - startTime) / 1000));
         }
     }
 }
