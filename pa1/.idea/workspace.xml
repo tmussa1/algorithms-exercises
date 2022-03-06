@@ -6,13 +6,19 @@
   <component name="ChangeListManager">
     <list default="true" id="9c0a0928-799b-4954-9e80-49526ae0121d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/Edge.class" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/Edge.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/Graph.class" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/Graph.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/IMergeSort.class" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/IMergeSort.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/MergeSort.class" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/MergeSort.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/MinimumSpanningTree.class" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/MinimumSpanningTree.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/RandMST.class" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/pa1/edu/harvard/extension/RandMST.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/max_weight_0D.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/max_weight_0D.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/data/max_weight_2D.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/max_weight_2D.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/max_weight_3D.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/max_weight_3D.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/max_weight_4D.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/max_weight_4D.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/max_weight_2D_graph.jpg" beforeDir="false" afterPath="$PROJECT_DIR$/data/max_weight_2D_graph.jpg" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/edu/harvard/extension/Edge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/harvard/extension/Edge.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/edu/harvard/extension/Graph.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/harvard/extension/Graph.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/edu/harvard/extension/IMergeSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/harvard/extension/IMergeSort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/edu/harvard/extension/MergeSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/harvard/extension/MergeSort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/edu/harvard/extension/MinimumSpanningTree.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/harvard/extension/MinimumSpanningTree.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/edu/harvard/extension/RandMST.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/edu/harvard/extension/RandMST.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../progassign1/writeup.docx" beforeDir="false" afterPath="$PROJECT_DIR$/../progassign1/writeup.docx" afterDir="false" />
     </list>
@@ -37,6 +43,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="project.propCompiler" />
   </component>
   <component name="RunManager">
     <configuration name="RandMST" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">

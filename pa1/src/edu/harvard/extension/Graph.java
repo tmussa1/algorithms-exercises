@@ -38,11 +38,11 @@ public class Graph implements IGraph {
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
                 // TODO - reseed
-                double weight = this.newRandom();
-//
-//                if(weight > Math.abs(throwOutBeyond)){
-//                    continue;
-//                }
+                float weight = this.newRandom();
+
+                if(weight > Math.abs(throwOutBeyond)){
+                    continue;
+                }
 
                 // Add it if in bound and the vertices hasn't been generated before
                 if(weight <= throwOutBeyond){
@@ -65,7 +65,7 @@ public class Graph implements IGraph {
     @Override
     public List<Edge> generateHigherDimensionalGraph(int numVertices, int dimension) {
 
-        Edge [] edges = new Edge[numVertices * (numVertices - 1) / 2];
+        Edge [] edges = new Edge[numVertices * 2];
         double throwOutBeyond = throwOutBeyond(numVertices, dimension);
 
         // Throw out an edge beyond this value
@@ -76,19 +76,25 @@ public class Graph implements IGraph {
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
 
-//                for(int k = 0; k < dimension; k++){
-//                    if(Math.abs(vertices[i][k] - vertices[j][k]) > Math.abs(throwOutBeyond)){
-//                        continue;
-//                    }
-//                }
+                for(int k = 0; k < dimension; k++){
+                    if(Math.abs(vertices[i][k] - vertices[j][k]) > Math.abs(throwOutBeyond)){
+                        continue;
+                    }
+                }
 
-                double weight = this.calculateEuclideanDistance(dimension,
+                float weight = this.calculateEuclideanDistance(dimension,
                         vertices[i], vertices[j]);
 
                 // Add it if in bound and the vertices hasn't been generated before
-               if(weight <= throwOutBeyond) {
+               if(weight <= throwOutBeyond){
+
                 	Edge edge = new Edge(i, j);
                     edge.setWeight(weight);
+
+                    if(count >= edges.length){
+                        edges = Arrays.copyOf(edges, count * 2);
+                    }
+
                     edges[count++] = edge;
                }
             }
@@ -121,8 +127,8 @@ public class Graph implements IGraph {
      * Random number generator
      * @return rand number between 0 and 1
      */
-    private double newRandom() {
-        return new Random().nextDouble();
+    private float newRandom() {
+        return new Random().nextFloat();
     }
 
     /**
@@ -132,12 +138,12 @@ public class Graph implements IGraph {
      * @param vertex2
      * @return
      */
-    private double calculateEuclideanDistance(int dimension, double [] vertex1, double [] vertex2) {
+    private float calculateEuclideanDistance(int dimension, double [] vertex1, double [] vertex2) {
         double total = 0.0;
         for(int i = 0; i < dimension; i++){
             total += Math.pow((vertex1[i] - vertex2[i]), 2);
         }
-        return Math.sqrt(total);
+        return (float) Math.sqrt(total);
     }
 
     /**
@@ -152,10 +158,10 @@ public class Graph implements IGraph {
         // These values were experimentally calculated
         // They depend on both dimension and number of vertices
         if(dimension == 2){
-            return  (0.84990957989574656) +
-                    (4.0844138749925336 * Math.pow(10, -3) * numVertices) -
-                    (2.3384161945512693 * Math.pow(10, -5) * numVertices * numVertices) +
-                    (4.3993209873393909 * Math.pow(10, -8) * numVertices * numVertices * numVertices);
+            return  0.80018287952212674 +
+                    4.7614690479836335 * Math.pow(10, -3) * numVertices -
+                    3.7723858534382249 * Math.pow(10, -5) * Math.pow(numVertices, 2) +
+                    9.7682894763278053 * Math.pow(10, -8) * Math.pow(numVertices, 3);
         } else if(dimension == 3){
             return  (0.99494038957085906) +
                     (3.7949020641474132 * Math.pow(10, -3) * numVertices) -

@@ -1,7 +1,5 @@
 package edu.harvard.extension;
 
-import java.util.List;
-
 /**
  * This class implements the classic merge sort algorithm tailored
  * to our use case
@@ -15,59 +13,59 @@ public class MergeSort implements IMergeSort {
      * @param right
      */
     @Override
-    public void mergeSort(List<Edge> edges, int left, int right) {
+    public void mergeSort(Edge [] edges, int left, int right) {
 
         if(left < right){
             int middle = left + (right - left) / 2;
             mergeSort(edges, left, middle);
             mergeSort(edges, middle + 1, right);
             merge(edges, left, middle, right);
-        }
+       }
     }
 
     /**
-     * Combines the edges to be sorted by weight
+     * Combines the edges to be sorted by weight.
+     * Inspired by https://www.geeksforgeeks.org/merge-sort/
      * @param edges
      * @param left
      * @param middle
      * @param right
      */
     @Override
-    public void merge(List<Edge> edges, int left, int middle, int right) {
+    public void merge(Edge [] edges, int left, int middle, int right) {
 
-        int leftSize = middle - left + 1;
-        int rightSize = right - middle;
+        int n1 = middle - left + 1;
+        int n2 = right - middle;
 
-        Edge [] leftEdgeList = new Edge[leftSize];
-        Edge [] rightEdgeList = new Edge[rightSize];
+        Edge [] leftEdgeList = new Edge[n1];
+        Edge [] rightEdgeList = new Edge[n2];
 
-        for(int i = 0; i < leftSize; i++){
-            leftEdgeList[i] = edges.get(left + i);
+        for(int i = 0; i < n1; i++){
+            leftEdgeList[i] = edges[left + i];
         }
 
-        for(int i = 0; i < rightSize; i++){
-            rightEdgeList[i] = edges.get(middle + 1 + i);
+        for(int j = 0; j < n2; j++){
+            rightEdgeList[j] = edges[middle + 1 + j];
         }
 
-        int leftRow = 0, rightRow = 0, mergedRow = left;
+        int i = 0, j = 0;
+        int k = left;
 
-        while(leftRow < leftSize && rightRow < rightSize){
-            if(edges.get(leftRow).getWeight() < edges.get(rightRow).getWeight()){
-                edges.set(leftRow, leftEdgeList[leftRow++]);
+        while(i < n1 && j < n2){
+            if(leftEdgeList[i].getWeight() <= rightEdgeList[j].getWeight()){
+                edges[k++] = leftEdgeList[i++];
             } else {
-                edges.set(rightRow, rightEdgeList[rightRow++]);
+                edges[k++] = rightEdgeList[j++];
             }
-            mergedRow++;
         }
 
-        while(leftRow < leftSize){
-            edges.set(leftRow, leftEdgeList[leftRow++]);
-            mergedRow++;
+        while(i < n1){
+            edges[k++] = leftEdgeList[i++];
         }
 
-        while(rightRow < rightSize){
-            edges.set(rightRow, rightEdgeList[rightRow++]);
-            mergedRow++;
+        while(j < n2){
+            edges[k++] = rightEdgeList[j++];
         }
+
     }
 }

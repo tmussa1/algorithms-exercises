@@ -14,7 +14,7 @@ public class RandMST {
     }
 
     public static void main(String[] args) {
-        int numTrials = 1000; // TODO - get as arg, write to file, come up with formula, run out of heap spaces and threw out edges
+        int numTrials = 5; // TODO - get as arg, write to file, come up with formula, run out of heap spaces and threw out edges
         int numVertices = 262144; // TODO - estimate runtime, run 0 d and flag, take command line arguments
         int dimension = 2;
 
@@ -33,7 +33,7 @@ public class RandMST {
                 total += calculateTotalWeight(spanningTrees);
 //                total += calculateMaxWeight(spanningTrees);
             }
-//            System.out.println(j + "," + (total / numTrials));
+//            System.out.println(j + "," + ((total / numTrials)));
             endTime = System.currentTimeMillis();
             System.out.println((total / numTrials) + "," + j + "," + numTrials + "," + dimension + "," +
                     ((endTime - startTime) / 1000));

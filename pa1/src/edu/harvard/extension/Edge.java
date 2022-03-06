@@ -9,10 +9,7 @@ public class Edge {
 
     private Integer vertex1;
     private Integer vertex2;
-    private double weight;
-
-    public Edge() {
-    }
+    private float weight;
 
     public Edge(Integer vertex1, Integer vertex2) {
         this.vertex1 = vertex1;
@@ -27,11 +24,11 @@ public class Edge {
         return vertex2;
     }
 
-    public double getWeight() {
+    public float getWeight() {
         return weight;
     }
 
-    public void setWeight(double weight) {
+    public void setWeight(float weight) {
         this.weight = weight;
     }
 
