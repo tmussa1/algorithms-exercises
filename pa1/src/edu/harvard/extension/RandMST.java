@@ -14,7 +14,7 @@ public class RandMST {
     }
 
     public static void main(String[] args) {
-        int numTrials = 5; // TODO - get as arg, write to file, come up with formula, run out of heap spaces and threw out edges
+        int numTrials = 100; // TODO - get as arg, write to file, come up with formula, run out of heap spaces and threw out edges
         int numVertices = 262144; // TODO - estimate runtime, run 0 d and flag, take command line arguments
         int dimension = 2;
 
@@ -25,7 +25,7 @@ public class RandMST {
 
         for(int j = 16; j <= numVertices; j *= 2) {
             total = 0.0;
-            long startTime = System.currentTimeMillis(), endTime = 0L;
+            long startTime = System.currentTimeMillis(), endTime;
             for(int i = 0; i < numTrials; i++){
                 // TODO - call with all dimensions, comment code
                 List<Edge> graphs = graph.generateGraphDriver(j, dimension);

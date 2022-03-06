@@ -2,6 +2,8 @@ package edu.harvard.extension;
 
 import java.util.*;
 
+import static java.lang.Math.log;
+
 /**
  * Contains methods that generate the graphs
  */
@@ -76,17 +78,22 @@ public class Graph implements IGraph {
         for(int i = 0; i < numVertices; i++){
             for(int j = 0; j < i; j++){
 
+                float weight = 0.f;
+
                 for(int k = 0; k < dimension; k++){
-                    if(Math.abs(vertices[i][k] - vertices[j][k]) > Math.abs(throwOutBeyond)){
+                    if(vertices[i][k] - vertices[j][k] > throwOutBeyond){
                         continue;
+                    } else {
+                        weight += Math.pow(vertices[i][k] - vertices[j][k], 2);
                     }
                 }
+                weight = (float) Math.sqrt(weight);
 
-                float weight = this.calculateEuclideanDistance(dimension,
-                        vertices[i], vertices[j]);
+//                float weight = this.calculateEuclideanDistance(dimension,
+//                        vertices[i], vertices[j]);
 
                 // Add it if in bound and the vertices hasn't been generated before
-               if(weight <= throwOutBeyond){
+               if(weight < throwOutBeyond){
 
                 	Edge edge = new Edge(i, j);
                     edge.setWeight(weight);
@@ -158,10 +165,10 @@ public class Graph implements IGraph {
         // These values were experimentally calculated
         // They depend on both dimension and number of vertices
         if(dimension == 2){
-            return  0.80018287952212674 +
-                    4.7614690479836335 * Math.pow(10, -3) * numVertices -
-                    3.7723858534382249 * Math.pow(10, -5) * Math.pow(numVertices, 2) +
-                    9.7682894763278053 * Math.pow(10, -8) * Math.pow(numVertices, 3);
+            return  (0.80018287952212674 / log(numVertices)) +
+                    4.7614690479836335 * Math.pow(10, -3) * log(log(numVertices)) -
+                    3.7723858534382249 * Math.pow(10, -5) * Math.pow(log(numVertices), 2) +
+                    9.7682894763278053 * Math.pow(10, -8) * Math.pow(log(log(numVertices)), 3);
         } else if(dimension == 3){
             return  (0.99494038957085906) +
                     (3.7949020641474132 * Math.pow(10, -3) * numVertices) -
