@@ -81,7 +81,7 @@ public class Graph implements IGraph {
                 float weight = 0.f;
 
                 for(int k = 0; k < dimension; k++){
-                    if(vertices[i][k] - vertices[j][k] > throwOutBeyond){
+                    if(Math.abs(vertices[i][k] - vertices[j][k]) > Math.abs(throwOutBeyond)){
                         continue;
                     } else {
                         weight += Math.pow(vertices[i][k] - vertices[j][k], 2);
@@ -99,7 +99,7 @@ public class Graph implements IGraph {
                     edge.setWeight(weight);
 
                     if(count >= edges.length){
-                        edges = Arrays.copyOf(edges, count * 2);
+                        edges = Arrays.copyOf(edges, count + numVertices);
                     }
 
                     edges[count++] = edge;
@@ -165,10 +165,15 @@ public class Graph implements IGraph {
         // These values were experimentally calculated
         // They depend on both dimension and number of vertices
         if(dimension == 2){
-            return  (0.80018287952212674 / log(numVertices)) +
-                    4.7614690479836335 * Math.pow(10, -3) * log(log(numVertices)) -
-                    3.7723858534382249 * Math.pow(10, -5) * Math.pow(log(numVertices), 2) +
-                    9.7682894763278053 * Math.pow(10, -8) * Math.pow(log(log(numVertices)), 3);
+            if(numVertices < 8192){
+                return  (8.00018287952212674 / log(numVertices)) +
+                        (4.7614690479836335 * Math.pow(10, -1) * (1.0 / numVertices)) -
+                        (3.7723858534382249 * Math.pow(10, -5) * Math.pow(log(numVertices), 2)) +
+                        (9.7682894763278053 * Math.pow(10, -8) * Math.pow((1.0 / numVertices), 3)) + 0.1;
+            } else {
+                return 2 / log(numVertices) + 0.1;
+            }
+
         } else if(dimension == 3){
             return  (0.99494038957085906) +
                     (3.7949020641474132 * Math.pow(10, -3) * numVertices) -

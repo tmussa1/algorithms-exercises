@@ -32,11 +32,11 @@ public class MinimumSpanningTree implements IMinimumSpanningTree {
          * Combine edges if they don't form a cycle
          */
         for(int i = 0; i < edgeListLength; i++){
-            if(disjointSet.findNodeParent(nodes[edgeList.get(i).getVertex1()])
-                    != disjointSet.findNodeParent(nodes[edgeList.get(i).getVertex2()])){
-                spanningTreeEdges[count++] = edgeList.get(i);
-                disjointSet.union(nodes[edgeList.get(i).getVertex1()],
-                        nodes[edgeList.get(i).getVertex2()]);
+            if(disjointSet.findNodeParent(nodes[graphEdges[i].getVertex1()])
+                    != disjointSet.findNodeParent(nodes[graphEdges[i].getVertex2()])){
+                spanningTreeEdges[count++] = graphEdges[i];
+                disjointSet.union(nodes[graphEdges[i].getVertex1()],
+                        nodes[graphEdges[i].getVertex2()]);
                 if(count > numVertices - 1){
                     break;
                 }
