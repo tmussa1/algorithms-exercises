@@ -16,7 +16,7 @@ public class RandMST {
     public static void main(String[] args) {
         int numTrials = 5; // TODO - get as arg, write to file, come up with formula, run out of heap spaces and threw out edges
         int numVertices = 262144; // TODO - estimate runtime, run 0 d and flag, take command line arguments
-        int dimension = 2;
+        int dimension = 3;
 
         IGraph graph = new Graph();
         IMinimumSpanningTree mst = new MinimumSpanningTree();
@@ -37,6 +37,7 @@ public class RandMST {
             endTime = System.currentTimeMillis();
             System.out.println((total / numTrials) + "," + j + "," + numTrials + "," + dimension + "," +
                     ((endTime - startTime) / 1000));
+            System.gc();
         }
     }
 }

@@ -81,16 +81,9 @@ public class Graph implements IGraph {
                 float weight = 0.f;
 
                 for(int k = 0; k < dimension; k++){
-                    if(Math.abs(vertices[i][k] - vertices[j][k]) > Math.abs(throwOutBeyond)){
-                        continue;
-                    } else {
-                        weight += Math.pow(vertices[i][k] - vertices[j][k], 2);
-                    }
+                   weight += Math.pow(vertices[i][k] - vertices[j][k], 2);
                 }
                 weight = (float) Math.sqrt(weight);
-
-//                float weight = this.calculateEuclideanDistance(dimension,
-//                        vertices[i], vertices[j]);
 
                 // Add it if in bound and the vertices hasn't been generated before
                if(weight < throwOutBeyond){
@@ -139,21 +132,6 @@ public class Graph implements IGraph {
     }
 
     /**
-     * Calculates Euclidean distance for higher dimensions
-     * @param dimension
-     * @param vertex1
-     * @param vertex2
-     * @return
-     */
-    private float calculateEuclideanDistance(int dimension, double [] vertex1, double [] vertex2) {
-        double total = 0.0;
-        for(int i = 0; i < dimension; i++){
-            total += Math.pow((vertex1[i] - vertex2[i]), 2);
-        }
-        return (float) Math.sqrt(total);
-    }
-
-    /**
      * Anything beyond the weight returned here is unlikely to be
      * part of the spanning tree and ignored
      * @param numVertices
@@ -164,26 +142,8 @@ public class Graph implements IGraph {
 
         // These values were experimentally calculated
         // They depend on both dimension and number of vertices
-        if(dimension == 2){
-            if(numVertices < 8192){
-                return  (8.00018287952212674 / log(numVertices)) +
-                        (4.7614690479836335 * Math.pow(10, -1) * (1.0 / numVertices)) -
-                        (3.7723858534382249 * Math.pow(10, -5) * Math.pow(log(numVertices), 2)) +
-                        (9.7682894763278053 * Math.pow(10, -8) * Math.pow((1.0 / numVertices), 3)) + 0.1;
-            } else {
-                return 2 / log(numVertices) + 0.1;
-            }
-
-        } else if(dimension == 3){
-            return  (0.99494038957085906) +
-                    (3.7949020641474132 * Math.pow(10, -3) * numVertices) -
-                    (1.9296136181377216 * Math.pow(10, -5) * numVertices * numVertices) +
-                    (3.2498446060161502 * Math.pow(10, -8) * numVertices * numVertices * numVertices);
-        } else if(dimension == 4){
-            return  (1.1144164132723846) +
-                    (3.6393587158792796 * Math.pow(10, -3) * numVertices) -
-                    (1.7384028258968941 * Math.pow(10, -5) * numVertices * numVertices) +
-                    (2.7652157861328113 * Math.pow(10, -8) * numVertices * numVertices * numVertices);
+        if(dimension == 2 || dimension == 3 || dimension == 4){
+        	  return (0.01 / (0.0203838847847773737 * numVertices + 4.002965874727)) + (numVertices < 64 ? 0.4 : numVertices <= 2048 ? 0.2 : 0.05);
         }
 
         return  (0.89581146548621804) +
