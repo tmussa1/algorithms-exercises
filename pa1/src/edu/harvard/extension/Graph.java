@@ -24,7 +24,7 @@ public class Graph implements IGraph {
     }
 
     /**
-     * Generates 0 dimensional grpah. Throws out edges beyond what is predicted
+     * Generates 0 dimensional graph. Throws out edges beyond what is predicted
      * by the regression line of the max weight claimed by the spanning tree
      * @param numVertices
      * @return List<Edge>
@@ -32,7 +32,7 @@ public class Graph implements IGraph {
     @Override
     public List<Edge> generate0DimensionalGraph(int numVertices) {
 
-        Edge [] edges = new Edge[numVertices * (numVertices - 1) / 2];
+        Edge [] edges = new Edge[numVertices * 2];
         double throwOutBeyond = throwOutBeyond(numVertices, 0); // Throw out an edge beyond this value
         int count = 0;
 
@@ -48,8 +48,14 @@ public class Graph implements IGraph {
 
                 // Add it if in bound and the vertices hasn't been generated before
                 if(weight <= throwOutBeyond){
-                    Edge edge = new Edge(i, j);
+                	
+                	Edge edge = new Edge(i, j);
                     edge.setWeight(weight);
+
+                    if(count >= edges.length){
+                        edges = Arrays.copyOf(edges, count + numVertices);
+                    }
+
                     edges[count++] = edge;
                 }
             }
@@ -142,8 +148,12 @@ public class Graph implements IGraph {
 
         // These values were experimentally calculated
         // They depend on both dimension and number of vertices
-        if(dimension == 2 || dimension == 3 || dimension == 4){
-        	  return (0.01 / (0.0203838847847773737 * numVertices + 4.002965874727)) + (numVertices < 64 ? 0.4 : numVertices <= 2048 ? 0.2 : 0.05);
+    	if(dimension == 2) {
+    		 return (0.01 / (0.0203838847847773737 * numVertices + 4.002965874727)) + (numVertices < 64 ? 0.32 : numVertices <= 2048 ? 0.2 : 0.02);
+    	} else if(dimension == 3){
+        	 return (0.01 / (0.0203838847847773737 * numVertices + 4.002965874727)) + (numVertices <= 128 ? 0.45 : numVertices <= 2048 ? 0.2 : 0.05);
+        } else if(dimension == 4) {
+        	 return (0.01 / (0.0203838847847773737 * numVertices + 4.002965874727)) + (numVertices <= 128 ? 0.55 : numVertices <= 16384 ? 0.3 : 0.07);
         }
 
         return  (0.89581146548621804) +
