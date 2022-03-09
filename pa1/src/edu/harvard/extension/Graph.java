@@ -42,10 +42,6 @@ public class Graph implements IGraph {
                 // TODO - reseed
                 float weight = this.newRandom();
 
-                if(weight > Math.abs(throwOutBeyond)){
-                    continue;
-                }
-
                 // Add it if in bound and the vertices hasn't been generated before
                 if(weight <= throwOutBeyond){
                 	
@@ -156,9 +152,7 @@ public class Graph implements IGraph {
         	 return (0.01 / (0.0203838847847773737 * numVertices + 4.002965874727)) + (numVertices <= 128 ? 0.55 : numVertices <= 16384 ? 0.3 : 0.07);
         }
 
-        return  (0.89581146548621804) +
-                (1.8269286203337126 * Math.pow(10, -3) * numVertices) -
-                (9.9612573963010997 * Math.pow(10, -6) * numVertices * numVertices) +
-                (1.6586622134495306 * Math.pow(10, -8) * numVertices * numVertices * numVertices);
+        return  (0.01 / (0.0203838847847773737 * numVertices + 4.002965874727)) + (numVertices <= 128 ? 0.28 : numVertices < 512 ? 0.05 : 
+        	numVertices <= 2048 ? 0.07 : numVertices < 16384 ? 0.005 : numVertices < 16384 ? 0.0009 : 0.0005);
     }
 }

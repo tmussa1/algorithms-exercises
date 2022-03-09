@@ -16,7 +16,7 @@ public class RandMST {
     public static void main(String[] args) {
         int numTrials = 5; // TODO - get as arg, write to file, come up with formula, run out of heap spaces and threw out edges
         int numVertices = 262144; // TODO - estimate runtime, run 0 d and flag, take command line arguments
-        int dimension = 4;       // TODO - call with all dimensions, comment code
+        int dimension = 0;             // TODO - call with all dimensions, comment code
 
         IGraph graph = new Graph();
         IMinimumSpanningTree mst = new MinimumSpanningTree();
@@ -30,11 +30,12 @@ public class RandMST {
                 List<Edge> graphs = graph.generateGraphDriver(j, dimension);
                 List<Edge> spanningTrees = mst.generateMinimumSpanningTree(j, dimension, graphs);
                 total += calculateTotalWeight(spanningTrees);
+//                total += calculateMaxWeight(spanningTrees);
             }
+//            System.out.println(j + "," + ((total / numTrials)));
             endTime = System.currentTimeMillis();
             System.out.println((total / numTrials) + "," + j + "," + numTrials + "," + dimension + "," +
                     ((endTime - startTime) / 1000));
-            System.gc();
         }
     }
 }
