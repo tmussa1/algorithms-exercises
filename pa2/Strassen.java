@@ -1,9 +1,12 @@
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Stream;
 
 public class Strassen {
@@ -139,8 +142,7 @@ public class Strassen {
         return C;
     }
 
-    // python3 strassen.py 0 dimension inputfile
-    public static void main(String [] args){
+    public static void main(String [] args) throws IOException {
 
         if(args.length != 3){
             throw new RuntimeException("Pass: Strassen.java <option> <dimension> <filename>");
@@ -180,5 +182,19 @@ public class Strassen {
         for(int i = 0; i < dimension; i++){
             System.out.println(result[i][i]);
         }
+
+//        int dimension = 4;
+//
+//        String fileName = "dimension_4_data.txt";
+//
+//        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+//
+//        for(int i = 0; i < (2 * dimension * dimension); i++){
+//            Integer randomInt = new Random().nextInt(10);
+//            writer.write(String.valueOf(randomInt));
+//            writer.write("\n");
+//        }
+//
+//        writer.close();
     }
 }
