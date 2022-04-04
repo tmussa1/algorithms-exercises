@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="31ab7f68-b851-4d96-be23-cff1fd49c1d1" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/pa1.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pa1.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../pset4/PrintNeatly.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../pset4/StringReconstruction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pa2/Strassen.java" beforeDir="false" afterPath="$PROJECT_DIR$/../pa2/Strassen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../pa2/out/production/pa2/Strassen.class" beforeDir="false" afterPath="$PROJECT_DIR$/../pa2/out/production/pa2/Strassen.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,7 +32,7 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pset4" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.0" />
@@ -70,6 +66,7 @@
       <option name="presentableId" value="Default" />
       <updated>1648926491875</updated>
       <workItem from="1648926494016" duration="191000" />
+      <workItem from="1649038765661" duration="910000" />
     </task>
     <servers />
   </component>

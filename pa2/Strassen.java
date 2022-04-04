@@ -4,6 +4,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Stream;
 
 /**
@@ -14,6 +15,13 @@ public class Strassen {
     // Experimentally determined
     private static final int CROSS_OVER_POINT = 16;
 
+    /**
+     * Strassen's matrix multiplication
+     * @param A
+     * @param B
+     * @param dimension
+     * @return
+     */
     public static int [] [] strassenMultiply(int [] [] A, int [][] B, int dimension){
 
         int [] [] result = new int [dimension][dimension];
@@ -104,7 +112,12 @@ public class Strassen {
         return new int [dimension] [dimension];
     }
 
-    // Multiply two matrices
+    /**
+     * Multiply two matrices
+     * @param A
+     * @param B
+     * @return
+     */
     private static int [] [] multiplyMatrices(int [] [] A, int [] [] B){
         int length = A.length;
         int [] [] C = new int[length] [length];
@@ -120,7 +133,12 @@ public class Strassen {
         return C;
     }
 
-    // Add two matrices
+    /**
+     * Add two matrices
+     * @param A
+     * @param B
+     * @return
+     */
     private static int [] [] addMatrices(int [] [] A, int [] [] B){
         int length = A.length;
         int [] [] C = new int[length] [length];
@@ -134,7 +152,12 @@ public class Strassen {
         return C;
     }
 
-    // Subtract two matrices
+    /**
+     * Subtract two matrices
+     * @param A
+     * @param B
+     * @return
+     */
     private static int [] [] subtractMatrices(int [] [] A, int [] [] B){
         int length = A.length;
         int [] [] C = new int[length] [length];
@@ -146,6 +169,52 @@ public class Strassen {
         }
 
         return C;
+    }
+
+    /**
+     *
+     * Generates random graph used to compute triangle in random graphs
+     * @param dimension
+     * @param probability
+     * @return
+     */
+    private static int [] [] generateRandomGraph(int dimension, double probability){
+
+        int [] [] adjacencyMatrix = new int[dimension][dimension];
+
+        for (int i = 0; i < dimension; i++) {
+            for (int j = 0; j < dimension; j++) {
+
+                double random = new Random().nextDouble();
+
+                if(random <= probability){
+                    adjacencyMatrix[i][j] = new Random().nextInt(3);
+                }
+            }
+        }
+
+        return adjacencyMatrix;
+    }
+
+    /**
+     * Calculates the needed value for random graph
+     * @param dimension
+     * @param probability
+     * @return
+     */
+    private static double calculateTriangleInRandomGraph(int dimension, double probability){
+
+        int [] [] adjacencyMatrix = generateRandomGraph(dimension, probability);
+        int [] [] A2 = strassenMultiply(adjacencyMatrix, adjacencyMatrix, dimension);
+        int [] [] A3 = strassenMultiply(A2, adjacencyMatrix, dimension);
+
+        int sum = 0;
+
+        for(int i = 0; i < dimension; i++){
+                sum += A3[i][i];
+        }
+
+        return (sum / 6.0);
     }
 
     public static void main(String [] args){
