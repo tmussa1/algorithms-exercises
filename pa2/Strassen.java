@@ -1,27 +1,30 @@
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Stream;
 
+/**
+ * Implements Strassen's algorithm
+ */
 public class Strassen {
 
-    private static final int CROSS_OVER_POINT = 20; // TODO
+    // Experimentally determined
+    private static final int CROSS_OVER_POINT = 16;
 
     public static int [] [] strassenMultiply(int [] [] A, int [][] B, int dimension){
 
         int [] [] result = new int [dimension][dimension];
         int halfDimension = dimension / 2;
 
+        // Traditional multiplication for less than crossover point
         if(dimension <= CROSS_OVER_POINT){
             return multiplyMatrices(A, B);
         }
 
+        // Even case
         if(dimension % 2 == 0){
 
             int [] [] A1 = createMatrix(halfDimension);
@@ -101,6 +104,7 @@ public class Strassen {
         return new int [dimension] [dimension];
     }
 
+    // Multiply two matrices
     private static int [] [] multiplyMatrices(int [] [] A, int [] [] B){
         int length = A.length;
         int [] [] C = new int[length] [length];
@@ -116,6 +120,7 @@ public class Strassen {
         return C;
     }
 
+    // Add two matrices
     private static int [] [] addMatrices(int [] [] A, int [] [] B){
         int length = A.length;
         int [] [] C = new int[length] [length];
@@ -129,6 +134,7 @@ public class Strassen {
         return C;
     }
 
+    // Subtract two matrices
     private static int [] [] subtractMatrices(int [] [] A, int [] [] B){
         int length = A.length;
         int [] [] C = new int[length] [length];
@@ -142,7 +148,7 @@ public class Strassen {
         return C;
     }
 
-    public static void main(String [] args) throws IOException {
+    public static void main(String [] args){
 
         if(args.length != 3){
             throw new RuntimeException("Pass: Strassen.java <option> <dimension> <filename>");
@@ -165,8 +171,8 @@ public class Strassen {
 
         for(int i = 0; i < dimension; i++){
             for(int j = 0; j < dimension; j++){
-               matrix1[i][j] = Integer.parseInt(lines.get(lineCount));
-               lineCount++;
+                matrix1[i][j] = Integer.parseInt(lines.get(lineCount));
+                lineCount++;
             }
         }
 
@@ -179,22 +185,9 @@ public class Strassen {
 
         int [] [] result = strassenMultiply(matrix1, matrix2, dimension);
 
+        // Output result
         for(int i = 0; i < dimension; i++){
             System.out.println(result[i][i]);
         }
-
-//        int dimension = 4;
-//
-//        String fileName = "dimension_4_data.txt";
-//
-//        BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
-//
-//        for(int i = 0; i < (2 * dimension * dimension); i++){
-//            Integer randomInt = new Random().nextInt(10);
-//            writer.write(String.valueOf(randomInt));
-//            writer.write("\n");
-//        }
-//
-//        writer.close();
     }
 }
