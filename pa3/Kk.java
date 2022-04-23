@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Kk {
 
@@ -18,6 +19,121 @@ public class Kk {
         }
 
         return heap.extract();
+    }
+
+    void copyElements(List<Long> source, List<Long> destination, int size){
+        for(int i = 0; i < size; i++){
+            destination.set(i, source.get(i));
+        }
+    }
+
+    Long calculateResidue(List<Long> elements, List<Long> sequence, int size){
+
+        Long residue = 0L;
+
+        for(int i = 0; i < size; i++){
+            residue += elements.get(i) * sequence.get(i);
+        }
+
+        return residue;
+    }
+
+    void randomNeighbor(List<Long> source, List<Long> destination, int size){
+
+        copyElements(source, destination, size);
+
+        int index1 = new Random().nextInt(size);
+        int index2 = new Random().nextInt(size);
+
+        while(index1 == index2){
+            index1 = new Random().nextInt(size);
+            index2 = new Random().nextInt(size);
+        }
+
+        destination.set(index1, source.get(index1) * -1);
+
+        if(new Random().nextInt(2) == 0){
+            destination.set(index2, destination.get(index2) * -1);
+        }
+    }
+
+    void generateStandardRandom(List<Long> sequence, int size){
+        for(int i = 0; i < size; i++){
+            sequence.add(new Random().nextInt(2) == 0 ? 1L : -1L);
+        }
+    }
+
+    Long hillClimbingStandardRandom(int maxIteration,
+                                    List<Long> sequence, List<Long> elements,
+                                    int size){
+
+        List<Long> newSequence = new ArrayList<>();
+        Long residue = 0L;
+
+        for(int i = 0; i < maxIteration; i++){
+
+            randomNeighbor(sequence, newSequence, size);
+            residue = calculateResidue(elements, sequence, size);
+
+            if(calculateResidue(elements, newSequence, size) < residue){
+                copyElements(newSequence, sequence, size);
+            }
+        }
+
+        return residue;
+    }
+
+    Long repeatedRandomStandardRandom(int maxIteration,
+                                      List<Long> sequence, List<Long> elements,
+                                      int size) {
+        List<Long> newSequence = new ArrayList<>();
+        Long residue = 0L;
+
+        for (int i = 0; i < maxIteration; i++) {
+            generateStandardRandom(newSequence, size);
+            residue = calculateResidue(elements, sequence, size);
+
+            if (calculateResidue(elements, newSequence, size) < residue) {
+                copyElements(newSequence, sequence, size);
+            }
+        }
+
+        return residue;
+    }
+
+    double T(int iteration){
+        return Math.pow(10, 10) * Math.pow(0.8, Math.floor(iteration / 300.0));
+    }
+
+    Long simulatedAnnealingStandardRandom(int maxIteration,
+                                          List<Long> sequence, List<Long> elements,
+                                          int size, List<Long> annealingSequence){
+        List<Long> newSequence = new ArrayList<>();
+        Long residue = 0L;
+        Long annealingResidue = 0L;
+
+        copyElements(sequence, annealingSequence, size);
+
+        for(int i = 0; i < maxIteration; i++){
+            randomNeighbor(sequence, newSequence, size);
+            double probability = Math.exp(-(calculateResidue(elements, newSequence, size) -
+                               calculateResidue(elements, sequence, size))/ T(i));
+
+            if(calculateResidue(elements, newSequence, size) <
+               calculateResidue(elements, sequence, size)
+               || new Random().nextDouble() < probability) {
+                copyElements(newSequence, sequence, size);
+            }
+
+            annealingResidue = calculateResidue(elements, annealingSequence, size);
+
+            if(calculateResidue(elements, sequence, size) < annealingResidue) {
+                residue = annealingResidue;
+                copyElements(sequence, annealingSequence, size);
+            }
+        }
+
+        return residue;
     }
 
     class MaxHeap {
