@@ -35,7 +35,7 @@ public class Kk {
             residue += (elements.get(i) * sequence.get(i));
         }
 
-        return residue;
+        return Math.abs(residue);
     }
 
     void randomNeighbor(List<Long> source, List<Long> destination, int size){
@@ -146,6 +146,12 @@ public class Kk {
         }
     }
 
+    void generateRandomPartition(List<Long> partition, int size, Long bound){
+        for(int i = 0; i < size; i++){
+            partition.set(i, (long) Math.ceil(new Random().nextDouble() * bound));
+        }
+    }
+
     void processPartitionNeighbor(List<Long> partition,
                                   List<Long> newPartition,
                                   int size){
@@ -181,6 +187,70 @@ public class Kk {
             if(partitionerKarmarkar > newElementsKarmarkar){
                 residue = newElementsKarmarkar;
                 copyElements(newPartition, partition, size);
+            }
+        }
+
+        return residue;
+    }
+
+    Long partitionedRepeatedRandom(int maxIteration,
+                                   List<Long> partition, List<Long> elements,
+                                   int size){
+        Long residue = 0L;
+        List<Long> newElements = new ArrayList<>();
+        List<Long> newPartition = new ArrayList<>();
+        List<Long> partitioner = new ArrayList<>();
+
+        for(int i = 0; i < maxIteration; i++){
+            processPartition(partition, elements, partitioner, size);
+            generateRandomPartition(newPartition, size, Long.valueOf(size));
+            processPartition(newPartition, elements, newElements, size);
+
+            residue = karmarkarKarp(partitioner);
+            Long newElementsResidue = karmarkarKarp(newElements);
+
+            if(residue > newElementsResidue){
+                copyElements(newPartition, partition, size);
+            }
+        }
+
+
+        return residue;
+    }
+
+    Long partitionedSimulatedAnnealing(int maxIteration,
+                                       List<Long> partition, List<Long> elements,
+                                       int size, List<Long> annealingPartition){
+
+        Long residue = 0L;
+        List<Long> newElements = new ArrayList<>();
+        List<Long> newPartition = new ArrayList<>();
+        List<Long> partitioner = new ArrayList<>();
+        List<Long> newPartitioner = new ArrayList<>();
+
+        for(int i = 0; i < maxIteration; i++){
+            processPartition(partition, elements, partitioner, size);
+            processPartitionNeighbor(partition, newPartition, size);
+            processPartition(newPartition, elements, newElements, size);
+            processPartition(annealingPartition, elements, newPartitioner, size);
+
+            Long partitionerResidue = karmarkarKarp(partitioner);
+            Long newElementsResidue = karmarkarKarp(newElements);
+            Long newPartitionerResidue = karmarkarKarp(newPartitioner);
+
+            double probability = Math.exp(-(newElementsResidue - partitionerResidue) / T(i));
+
+            if(partitionerResidue > newElementsResidue
+                    || new Random().nextDouble() <= probability){
+                copyElements(newPartition, partition, size);
+            }
+
+            processPartition(partition, elements, partitioner, size);
+            partitionerResidue = karmarkarKarp(partitioner);
+
+            if(partitionerResidue < newPartitionerResidue){
+                residue = partitionerResidue;
+                copyElements(partition, annealingPartition, size);
             }
         }
 
