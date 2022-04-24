@@ -32,9 +32,9 @@ public class Partition {
         }
     }
 
-    Long calculateResidue(long [] elements, long [] sequence, int size){
+    long calculateResidue(long [] elements, long [] sequence, int size){
 
-        Long residue = 0L;
+        long residue = 0L;
 
         for(int i = 0; i < size; i++){
             residue += (elements[i] * sequence[i]);
@@ -43,9 +43,7 @@ public class Partition {
         return Math.abs(residue);
     }
 
-    void randomNeighbor(long [] source, long [] destination, int size){
-
-        copyElements(source, destination, size);
+    long [] randomNeighbor(long [] neighbor, int size){
 
         int index1, index2;
 
@@ -54,37 +52,42 @@ public class Partition {
             index2 = new Random().nextInt(size);
         } while(index1 == index2);
 
-        destination[index1] = (destination[index1] * -1);
+        neighbor[index1] *= -1;
 
         if(new Random().nextInt(2) % 2 == 0){
-            destination[index2] = (destination[index2] * -1);
+            neighbor[index2] *= -1;
         }
+
+        return neighbor;
     }
 
-    void generateStandardRandomSequence(long [] sequence, int size){
+    long [] generateStandardRandomSequence(long [] sequence, int size){
         for(int i = 0; i < size; i++){
             sequence[i] = (new Random().nextInt(2) % 2 == 0 ? 1L : -1L);
         }
+        return sequence;
     }
 
-    Long hillClimbingStandardRandom(int maxIteration,
-                                    long [] sequence, long [] elements,
+    long hillClimbingStandardRandom(int maxIteration, long [] elements,
                                     int size){
 
-        long [] newSequence = new long [size];
-        Long residue = 0L;
+        long [] randomSequence = new long [size];
+        randomSequence = generateStandardRandomSequence(randomSequence, size);
+        long randomResidue = calculateResidue(elements, randomSequence, size);
+        long residue;
 
         for(int i = 0; i < maxIteration; i++){
 
-            randomNeighbor(sequence, newSequence, size);
-            residue = calculateResidue(elements, sequence, size);
+            long [] neighbor = randomNeighbor(randomSequence, size);
+            residue = calculateResidue(elements, neighbor, size);
 
-            if(calculateResidue(elements, newSequence, size) < residue){
-                copyElements(newSequence, sequence, size);
+            if(residue < randomResidue){
+                 randomResidue = residue;
+                 copyElements(neighbor, randomSequence, size);
             }
         }
 
-        return residue;
+        return randomResidue;
     }
 
     long repeatedRandomStandardRandom(int maxIteration,
@@ -110,31 +113,28 @@ public class Partition {
         return Math.pow(10, 10) * Math.pow(0.8, Math.floor(iteration / 300.0));
     }
 
-    long simulatedAnnealingStandardRandom(int maxIteration,
-                                          long [] sequence, long [] elements,
+    long simulatedAnnealingStandardRandom(int maxIteration, long [] elements,
                                           int size, long [] annealingSequence){
-        long [] newSequence = new long[size];
-        long residue = 0L;
-        long annealingResidue = 0L;
-
-        copyElements(sequence, annealingSequence, size);
+        long [] sequence = new long[size];
+        long [] randomSolution = generateStandardRandomSequence(sequence, size);
+        long randomResidue = calculateResidue(elements, randomSolution, size);
+        long [] solution = randomSolution;
+        long residue = randomResidue;
 
         for(int i = 0; i < maxIteration; i++){
-            randomNeighbor(sequence, newSequence, size);
-            double probability = Math.exp(-(calculateResidue(elements, newSequence, size) -
-                               calculateResidue(elements, sequence, size))/ T(i));
+            long [] potentialSolution = randomNeighbor(sequence, size);
+            long potentialResidue = calculateResidue(elements, potentialSolution, size);
 
-            if(calculateResidue(elements, newSequence, size) <
-               calculateResidue(elements, sequence, size)
-               || new Random().nextDouble() < probability) {
-                copyElements(newSequence, sequence, size);
+            double probability = Math.exp(-(potentialResidue - randomResidue)/ T(i));
+
+            if(potentialResidue < randomResidue || new Random().nextDouble() < probability) {
+                copyElements(potentialSolution, randomSolution, size);
+                randomResidue = potentialResidue;
             }
 
-            annealingResidue = calculateResidue(elements, annealingSequence, size);
-
-            if(calculateResidue(elements, sequence, size) < annealingResidue) {
-                residue = calculateResidue(elements, sequence, size);
-                copyElements(sequence, annealingSequence, size);
+            if(randomResidue < residue){
+                residue = randomResidue;
+                copyElements(randomSolution, solution, size);
             }
         }
 
@@ -378,28 +378,26 @@ public class Partition {
                 break;
             }
             case 2: {
-                long [] sequence = new long[maxSize];
-                partition.generateStandardRandomSequence(sequence, numsList.size());
-                partition.hillClimbingStandardRandom(maxIteration, sequence, numsArray, maxSize);
+                partition.hillClimbingStandardRandom(maxIteration, numsArray, maxSize);
                 break;
             }
             case 3: {
                 long [] sequence = new long[maxSize];
-                partition.generateStandardRandomSequence(sequence, numsList.size());
+                partition.generateStandardRandomSequence(sequence, maxSize);
                 long [] annealingSequence = new long[maxSize];
                 partition.copyElements(sequence, annealingSequence, numsList.size());
-                partition.simulatedAnnealingStandardRandom(maxIteration, sequence, numsArray, maxSize, annealingSequence);
+                partition.simulatedAnnealingStandardRandom(maxIteration, numsArray, maxSize, annealingSequence);
                 break;
             }
             case 11: {
                 long [] partitionLst = new long[maxSize];
-                partition.generateRandomPartition(partitionLst, numsList.size(), Long.valueOf(maxSize));
+                partition.generateRandomPartition(partitionLst, maxSize, Long.valueOf(maxSize));
                 partition.partitionedRepeatedRandom(maxIteration, partitionLst, numsArray, maxSize);
                 break;
             }
             case 12: {
                 long [] partitionLst = new long [maxSize];
-                partition.generateRandomPartition(partitionLst, numsList.size(), Long.valueOf(maxSize));
+                partition.generateRandomPartition(partitionLst, maxSize, Long.valueOf(maxSize));
                 partition.partitionedHillClimbing(maxIteration, partitionLst, numsArray, maxSize);
                 break;
             }
