@@ -1,8 +1,13 @@
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Stream;
 
-public class Kk {
+public class Partition {
 
     Long karmarkarKarp(List<Long> elements){
 
@@ -22,8 +27,9 @@ public class Kk {
     }
 
     void copyElements(List<Long> source, List<Long> destination, int size){
+        destination = new ArrayList<>();
         for(int i = 0; i < size; i++){
-            destination.set(i, source.get(i));
+            destination.add(source.get(i));
         }
     }
 
@@ -45,8 +51,8 @@ public class Kk {
         int index1, index2;
 
         do {
-            index1 = new Random().nextInt(size);
-            index2 = new Random().nextInt(size);
+            index1 = new Random().nextInt(source.size());
+            index2 = new Random().nextInt(source.size());
         } while(index1 == index2);
 
         destination.set(index1, destination.get(index1) * -1);
@@ -56,9 +62,9 @@ public class Kk {
         }
     }
 
-    void generateStandardRandom(List<Long> sequence, int size){
+    void generateStandardRandomSequence(List<Long> sequence, int size){
         for(int i = 0; i < size; i++){
-            sequence.add(new Random().nextInt(2) == 0 ? 1L : -1L);
+            sequence.add(new Random().nextInt(2) % 2 == 0 ? 1L : -1L);
         }
     }
 
@@ -89,7 +95,7 @@ public class Kk {
         Long residue = 0L;
 
         for (int i = 0; i < maxIteration; i++) {
-            generateStandardRandom(newSequence, size);
+            generateStandardRandomSequence(newSequence, size);
             residue = calculateResidue(elements, sequence, size);
 
             if (calculateResidue(elements, newSequence, size) < residue) {
@@ -142,7 +148,7 @@ public class Kk {
 
         for(int i = 0; i < size; i++){
             Long value = destination.get(partition.get(i).intValue()) + elements.get(i);
-            destination.set(partition.get(i).intValue(), value);
+            destination.add(partition.get(i).intValue(), value);
         }
     }
 
@@ -291,7 +297,7 @@ public class Kk {
         }
 
         public int getSize() {
-            return size;
+            return heap.size();
         }
 
         void heapify(int position){
@@ -300,8 +306,11 @@ public class Kk {
                 return;
             }
 
-            if(heap.get(position) < heap.get(leftChild(position))
-              || heap.get(position) < heap.get(rightChild(position))){
+            if((position < getSize() &&
+                    rightChild(position) < getSize() &&
+                    leftChild(position) < getSize()) &&
+                    (heap.get(position) < heap.get(leftChild(position))
+              || heap.get(position) < heap.get(rightChild(position)))){
 
                 if(heap.get(leftChild(position)) >
                         heap.get(rightChild(position))){
@@ -316,23 +325,91 @@ public class Kk {
 
         void insert(Long element){
 
-            heap.set(size, element);
+            heap.add(element);
 
-            int curr = size;
+            int curr = getSize() - 1;
 
             while(heap.get(curr) > heap.get(parent(curr))){
                 swap(curr, parent(curr));
                 curr = parent(curr);
             }
-
-            size++;
         }
 
         Long extract(){
             Long element =  heap.get(0);
-            heap.set(0, heap.get(size--));
+            heap.set(0, heap.get(getSize() - 1));
+            heap.remove(getSize() - 1);
             heapify(0);
             return element;
         }
+    }
+
+
+    public static void main(String [] args){
+
+        if(args.length != 3){
+            throw new RuntimeException("Pass: Partition.java <flag> <algorithm> <input_file>");
+        }
+
+        String fileName = args[2];
+        Integer algorithm = Integer.parseInt(args[1]);
+        List<Long> nums = new ArrayList<>();
+
+        try (Stream<String> stream = Files.lines(Paths.get(String.valueOf(new File(fileName))))) {
+            stream.forEach((line) -> nums.add(Long.parseLong(line)));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Partition partition = new Partition();
+        int maxIteration = 25000;
+
+        switch(algorithm){
+            case 0: {
+                System.out.println(partition.karmarkarKarp(nums));
+                break;
+            }
+            case 1: {
+                List<Long> sequence = new ArrayList<>();
+                partition.generateStandardRandomSequence(sequence, nums.size());
+                System.out.println(partition.repeatedRandomStandardRandom(maxIteration, sequence, nums, nums.size()));
+                break;
+            }
+            case 2: {
+                List<Long> sequence = new ArrayList<>();
+                partition.generateStandardRandomSequence(sequence, nums.size());
+                partition.hillClimbingStandardRandom(maxIteration, sequence, nums, nums.size());
+                break;
+            }
+            case 3: {
+                List<Long> sequence = new ArrayList<>();
+                partition.generateStandardRandomSequence(sequence, nums.size());
+                List<Long> annealingSequence = new ArrayList<>();
+                partition.copyElements(sequence, annealingSequence, nums.size());
+                partition.simulatedAnnealingStandardRandom(maxIteration, sequence, nums, nums.size(), annealingSequence);
+                break;
+            }
+            case 11: {
+                List<Long> partitionLst = new ArrayList<>();
+                partition.generateRandomPartition(partitionLst, nums.size(), Long.valueOf(nums.size()));
+                partition.partitionedRepeatedRandom(maxIteration, partitionLst, nums, nums.size());
+                break;
+            }
+            case 12: {
+                List<Long> partitionLst = new ArrayList<>();
+                partition.generateRandomPartition(partitionLst, nums.size(), Long.valueOf(nums.size()));
+                partition.partitionedHillClimbing(maxIteration, partitionLst, nums, nums.size());
+                break;
+            }
+            case 13: {
+                List<Long> partitionLst = new ArrayList<>();
+                partition.generateRandomPartition(partitionLst, nums.size(), Long.valueOf(nums.size()));
+                List<Long> annealingPartition = new ArrayList<>();
+                partition.copyElements(partitionLst, annealingPartition, nums.size());
+                partition.partitionedSimulatedAnnealing(maxIteration, partitionLst, nums, nums.size(), annealingPartition);
+                break;
+            }
+        }
+
     }
 }
