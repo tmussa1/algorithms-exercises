@@ -9,15 +9,15 @@ import java.util.stream.Stream;
 
 public class Partition {
 
-    Long karmarkarKarp(List<Long> elements){
+    Long karmarkarKarp(long [] elements){
 
         MaxHeap heap = new MaxHeap();
 
-        for(int i = 0; i < elements.size(); i++){
-            heap.insert(elements.get(i));
+        for(int i = 0; i < elements.length; i++){
+            heap.insert(elements[i]);
         }
 
-        while(heap.getSize() > 1){
+        while(heap.size > 1){
             Long max1 = heap.extract();
             Long max2 = heap.extract();
             heap.insert(max1 - max2);
@@ -26,53 +26,52 @@ public class Partition {
         return heap.extract();
     }
 
-    void copyElements(List<Long> source, List<Long> destination, int size){
-        destination = new ArrayList<>();
+    void copyElements(long [] source, long [] destination, int size){
         for(int i = 0; i < size; i++){
-            destination.add(source.get(i));
+            destination[i] = source[i];
         }
     }
 
-    Long calculateResidue(List<Long> elements, List<Long> sequence, int size){
+    Long calculateResidue(long [] elements, long [] sequence, int size){
 
         Long residue = 0L;
 
         for(int i = 0; i < size; i++){
-            residue += (elements.get(i) * sequence.get(i));
+            residue += (elements[i] * sequence[i]);
         }
 
         return Math.abs(residue);
     }
 
-    void randomNeighbor(List<Long> source, List<Long> destination, int size){
+    void randomNeighbor(long [] source, long [] destination, int size){
 
         copyElements(source, destination, size);
 
         int index1, index2;
 
         do {
-            index1 = new Random().nextInt(source.size());
-            index2 = new Random().nextInt(source.size());
+            index1 = new Random().nextInt(size);
+            index2 = new Random().nextInt(size);
         } while(index1 == index2);
 
-        destination.set(index1, destination.get(index1) * -1);
+        destination[index1] = (destination[index1] * -1);
 
-        if(new Random().nextInt(2) == 0){
-            destination.set(index2, destination.get(index2) * -1);
+        if(new Random().nextInt(2) % 2 == 0){
+            destination[index2] = (destination[index2] * -1);
         }
     }
 
-    void generateStandardRandomSequence(List<Long> sequence, int size){
+    void generateStandardRandomSequence(long [] sequence, int size){
         for(int i = 0; i < size; i++){
-            sequence.add(new Random().nextInt(2) % 2 == 0 ? 1L : -1L);
+            sequence[i] = (new Random().nextInt(2) % 2 == 0 ? 1L : -1L);
         }
     }
 
     Long hillClimbingStandardRandom(int maxIteration,
-                                    List<Long> sequence, List<Long> elements,
+                                    long [] sequence, long [] elements,
                                     int size){
 
-        List<Long> newSequence = new ArrayList<>();
+        long [] newSequence = new long [size];
         Long residue = 0L;
 
         for(int i = 0; i < maxIteration; i++){
@@ -88,11 +87,11 @@ public class Partition {
         return residue;
     }
 
-    Long repeatedRandomStandardRandom(int maxIteration,
-                                      List<Long> sequence, List<Long> elements,
+    long repeatedRandomStandardRandom(int maxIteration,
+                                      long [] sequence, long [] elements,
                                       int size) {
-        List<Long> newSequence = new ArrayList<>();
-        Long residue = 0L;
+        long [] newSequence = new long [size];
+        long residue = 0L;
 
         for (int i = 0; i < maxIteration; i++) {
             generateStandardRandomSequence(newSequence, size);
@@ -111,12 +110,12 @@ public class Partition {
         return Math.pow(10, 10) * Math.pow(0.8, Math.floor(iteration / 300.0));
     }
 
-    Long simulatedAnnealingStandardRandom(int maxIteration,
-                                          List<Long> sequence, List<Long> elements,
-                                          int size, List<Long> annealingSequence){
-        List<Long> newSequence = new ArrayList<>();
-        Long residue = 0L;
-        Long annealingResidue = 0L;
+    long simulatedAnnealingStandardRandom(int maxIteration,
+                                          long [] sequence, long [] elements,
+                                          int size, long [] annealingSequence){
+        long [] newSequence = new long[size];
+        long residue = 0L;
+        long annealingResidue = 0L;
 
         copyElements(sequence, annealingSequence, size);
 
@@ -142,45 +141,46 @@ public class Partition {
         return residue;
     }
 
-    void processPartition(List<Long> partition,
-                          List<Long> elements, List<Long> destination,
+    void processPartition(long [] partition,
+                          long [] elements, long [] destination,
                           int size){
 
         for(int i = 0; i < size; i++){
-            Long value = destination.get(partition.get(i).intValue()) + elements.get(i);
-            destination.add(partition.get(i).intValue(), value);
+            int index = Long.valueOf(partition[i]).intValue();
+            Long value = destination[index] + elements[i];
+            destination[index] = value;
         }
     }
 
-    void generateRandomPartition(List<Long> partition, int size, Long bound){
+    void generateRandomPartition(long [] partition, int size, Long bound){
         for(int i = 0; i < size; i++){
-            partition.set(i, (long) Math.ceil(new Random().nextDouble() * bound));
+            partition[i] = (long) Math.ceil(new Random().nextDouble() * bound);
         }
     }
 
-    void processPartitionNeighbor(List<Long> partition,
-                                  List<Long> newPartition,
+    void processPartitionNeighbor(long [] partition,
+                                  long [] newPartition,
                                   int size){
         copyElements(partition, newPartition, size);
 
         int index1;
-        Long index2;
+        long index2;
 
         do {
             index1 = new Random().nextInt(size);
             index2 = Long.valueOf(new Random().nextInt(size));
-        } while(newPartition.get(index1).equals(index2));
+        } while(newPartition[index1] == index2);
 
-        newPartition.set(index1, index2);
+        newPartition[index1] = index2;
     }
 
     Long partitionedHillClimbing(int maxIteration,
-                                 List<Long> partition, List<Long> elements,
+                                 long [] partition, long [] elements,
                                  int size){
         Long residue = 0L;
-        List<Long> partitioner = new ArrayList<>();
-        List<Long> newPartition = new ArrayList<>();
-        List<Long> newElements = new ArrayList<>();
+        long [] partitioner = new long[size];
+        long [] newPartition = new long[size];
+        long [] newElements = new long[size];
 
         for(int i = 0; i < maxIteration; i++){
             processPartition(partition, elements, partitioner, size);
@@ -200,12 +200,12 @@ public class Partition {
     }
 
     Long partitionedRepeatedRandom(int maxIteration,
-                                   List<Long> partition, List<Long> elements,
+                                   long [] partition, long [] elements,
                                    int size){
         Long residue = 0L;
-        List<Long> newElements = new ArrayList<>();
-        List<Long> newPartition = new ArrayList<>();
-        List<Long> partitioner = new ArrayList<>();
+        long [] newElements = new long[size];
+        long [] newPartition = new long[size];
+        long [] partitioner = new long[size];
 
         for(int i = 0; i < maxIteration; i++){
             processPartition(partition, elements, partitioner, size);
@@ -225,14 +225,14 @@ public class Partition {
     }
 
     Long partitionedSimulatedAnnealing(int maxIteration,
-                                       List<Long> partition, List<Long> elements,
-                                       int size, List<Long> annealingPartition){
+                                       long [] partition, long [] elements,
+                                       int size, long [] annealingPartition){
 
         Long residue = 0L;
-        List<Long> newElements = new ArrayList<>();
-        List<Long> newPartition = new ArrayList<>();
-        List<Long> partitioner = new ArrayList<>();
-        List<Long> newPartitioner = new ArrayList<>();
+        long [] newElements = new long[size];
+        long [] newPartition = new long[size];
+        long [] partitioner = new long[size];
+        long [] newPartitioner = new long[size];
 
         for(int i = 0; i < maxIteration; i++){
             processPartition(partition, elements, partitioner, size);
@@ -266,18 +266,19 @@ public class Partition {
 
     class MaxHeap {
 
-        private List<Long> heap;
+        private long [] heap;
         private int size;
+        private int maxSize = 100;
 
         public MaxHeap(){
             this.size = 0;
-            this.heap = new ArrayList<>();
+            this.heap = new long[maxSize];
         }
 
         void swap(int aPos, int bPos){
-            Long temp = heap.get(aPos);
-            heap.set(aPos, heap.get(bPos));
-            heap.set(bPos, temp);
+            long temp = heap[aPos];
+            heap[aPos] = heap[bPos];
+            heap[bPos] = temp;
         }
 
         boolean isLeaf(int position){
@@ -296,24 +297,17 @@ public class Partition {
             return (position - 1) / 2;
         }
 
-        public int getSize() {
-            return heap.size();
-        }
-
         void heapify(int position){
 
             if(isLeaf(position)){
                 return;
             }
 
-            if((position < getSize() &&
-                    rightChild(position) < getSize() &&
-                    leftChild(position) < getSize()) &&
-                    (heap.get(position) < heap.get(leftChild(position))
-              || heap.get(position) < heap.get(rightChild(position)))){
+            if((leftChild(position) < size && heap[position] < heap[leftChild(position)])
+              || (rightChild(position) < size && heap[position] < heap[rightChild(position)])){
 
-                if(heap.get(leftChild(position)) >
-                        heap.get(rightChild(position))){
+                if(heap[leftChild(position)] >
+                        heap[rightChild(position)]){
                     swap(position, leftChild(position));
                     heapify(leftChild(position));
                 } else {
@@ -325,20 +319,21 @@ public class Partition {
 
         void insert(Long element){
 
-            heap.add(element);
+            heap[size] = element;
 
-            int curr = getSize() - 1;
+            int curr = size;
 
-            while(heap.get(curr) > heap.get(parent(curr))){
+            while(heap[curr] > heap[parent(curr)]){
                 swap(curr, parent(curr));
                 curr = parent(curr);
             }
+
+            size++;
         }
 
         Long extract(){
-            Long element =  heap.get(0);
-            heap.set(0, heap.get(getSize() - 1));
-            heap.remove(getSize() - 1);
+            Long element = heap[0];
+            heap[0] = heap[--size];
             heapify(0);
             return element;
         }
@@ -353,10 +348,11 @@ public class Partition {
 
         String fileName = args[2];
         Integer algorithm = Integer.parseInt(args[1]);
-        List<Long> nums = new ArrayList<>();
+        List<Long> numsList = new ArrayList<>();
+        int maxSize = 100;
 
         try (Stream<String> stream = Files.lines(Paths.get(String.valueOf(new File(fileName))))) {
-            stream.forEach((line) -> nums.add(Long.parseLong(line)));
+            stream.forEach((line) -> numsList.add(Long.parseLong(line)));
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -364,49 +360,55 @@ public class Partition {
         Partition partition = new Partition();
         int maxIteration = 25000;
 
+        long [] numsArray = new long[maxSize];
+
+        for(int i = 0; i < maxSize; i++){
+            numsArray[i] = numsList.get(i);
+        }
+
         switch(algorithm){
             case 0: {
-                System.out.println(partition.karmarkarKarp(nums));
+                System.out.println(partition.karmarkarKarp(numsArray));
                 break;
             }
             case 1: {
-                List<Long> sequence = new ArrayList<>();
-                partition.generateStandardRandomSequence(sequence, nums.size());
-                System.out.println(partition.repeatedRandomStandardRandom(maxIteration, sequence, nums, nums.size()));
+                long [] sequence = new long[maxSize];
+                partition.generateStandardRandomSequence(sequence, maxSize);
+                System.out.println(partition.repeatedRandomStandardRandom(maxIteration, sequence, numsArray, maxSize));
                 break;
             }
             case 2: {
-                List<Long> sequence = new ArrayList<>();
-                partition.generateStandardRandomSequence(sequence, nums.size());
-                partition.hillClimbingStandardRandom(maxIteration, sequence, nums, nums.size());
+                long [] sequence = new long[maxSize];
+                partition.generateStandardRandomSequence(sequence, numsList.size());
+                partition.hillClimbingStandardRandom(maxIteration, sequence, numsArray, maxSize);
                 break;
             }
             case 3: {
-                List<Long> sequence = new ArrayList<>();
-                partition.generateStandardRandomSequence(sequence, nums.size());
-                List<Long> annealingSequence = new ArrayList<>();
-                partition.copyElements(sequence, annealingSequence, nums.size());
-                partition.simulatedAnnealingStandardRandom(maxIteration, sequence, nums, nums.size(), annealingSequence);
+                long [] sequence = new long[maxSize];
+                partition.generateStandardRandomSequence(sequence, numsList.size());
+                long [] annealingSequence = new long[maxSize];
+                partition.copyElements(sequence, annealingSequence, numsList.size());
+                partition.simulatedAnnealingStandardRandom(maxIteration, sequence, numsArray, maxSize, annealingSequence);
                 break;
             }
             case 11: {
-                List<Long> partitionLst = new ArrayList<>();
-                partition.generateRandomPartition(partitionLst, nums.size(), Long.valueOf(nums.size()));
-                partition.partitionedRepeatedRandom(maxIteration, partitionLst, nums, nums.size());
+                long [] partitionLst = new long[maxSize];
+                partition.generateRandomPartition(partitionLst, numsList.size(), Long.valueOf(maxSize));
+                partition.partitionedRepeatedRandom(maxIteration, partitionLst, numsArray, maxSize);
                 break;
             }
             case 12: {
-                List<Long> partitionLst = new ArrayList<>();
-                partition.generateRandomPartition(partitionLst, nums.size(), Long.valueOf(nums.size()));
-                partition.partitionedHillClimbing(maxIteration, partitionLst, nums, nums.size());
+                long [] partitionLst = new long [maxSize];
+                partition.generateRandomPartition(partitionLst, numsList.size(), Long.valueOf(maxSize));
+                partition.partitionedHillClimbing(maxIteration, partitionLst, numsArray, maxSize);
                 break;
             }
             case 13: {
-                List<Long> partitionLst = new ArrayList<>();
-                partition.generateRandomPartition(partitionLst, nums.size(), Long.valueOf(nums.size()));
-                List<Long> annealingPartition = new ArrayList<>();
-                partition.copyElements(partitionLst, annealingPartition, nums.size());
-                partition.partitionedSimulatedAnnealing(maxIteration, partitionLst, nums, nums.size(), annealingPartition);
+                long [] partitionLst = new long[maxSize];
+                partition.generateRandomPartition(partitionLst, maxSize, Long.valueOf(maxSize));
+                long [] annealingPartition = new long[maxSize];
+                partition.copyElements(partitionLst, annealingPartition, numsList.size());
+                partition.partitionedSimulatedAnnealing(maxIteration, partitionLst, numsArray, maxSize, annealingPartition);
                 break;
             }
         }
