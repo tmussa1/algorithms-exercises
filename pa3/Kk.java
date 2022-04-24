@@ -32,7 +32,7 @@ public class Kk {
         Long residue = 0L;
 
         for(int i = 0; i < size; i++){
-            residue += elements.get(i) * sequence.get(i);
+            residue += (elements.get(i) * sequence.get(i));
         }
 
         return residue;
@@ -42,15 +42,14 @@ public class Kk {
 
         copyElements(source, destination, size);
 
-        int index1 = new Random().nextInt(size);
-        int index2 = new Random().nextInt(size);
+        int index1, index2;
 
-        while(index1 == index2){
+        do {
             index1 = new Random().nextInt(size);
             index2 = new Random().nextInt(size);
-        }
+        } while(index1 == index2);
 
-        destination.set(index1, source.get(index1) * -1);
+        destination.set(index1, destination.get(index1) * -1);
 
         if(new Random().nextInt(2) == 0){
             destination.set(index2, destination.get(index2) * -1);
@@ -94,6 +93,7 @@ public class Kk {
             residue = calculateResidue(elements, sequence, size);
 
             if (calculateResidue(elements, newSequence, size) < residue) {
+                residue = calculateResidue(elements, newSequence, size);
                 copyElements(newSequence, sequence, size);
             }
         }
@@ -128,10 +128,62 @@ public class Kk {
             annealingResidue = calculateResidue(elements, annealingSequence, size);
 
             if(calculateResidue(elements, sequence, size) < annealingResidue) {
-                residue = annealingResidue;
+                residue = calculateResidue(elements, sequence, size);
                 copyElements(sequence, annealingSequence, size);
             }
         }
+
+        return residue;
+    }
+
+    void processPartition(List<Long> partition,
+                          List<Long> elements, List<Long> destination,
+                          int size){
+
+        for(int i = 0; i < size; i++){
+            Long value = destination.get(partition.get(i).intValue()) + elements.get(i);
+            destination.set(partition.get(i).intValue(), value);
+        }
+    }
+
+    void processPartitionNeighbor(List<Long> partition,
+                                  List<Long> newPartition,
+                                  int size){
+        copyElements(partition, newPartition, size);
+
+        int index1;
+        Long index2;
+
+        do {
+            index1 = new Random().nextInt(size);
+            index2 = Long.valueOf(new Random().nextInt(size));
+        } while(newPartition.get(index1).equals(index2));
+
+        newPartition.set(index1, index2);
+    }
+
+    Long partitionedHillClimbing(int maxIteration,
+                                 List<Long> partition, List<Long> elements,
+                                 int size){
+        Long residue = 0L;
+        List<Long> partitioner = new ArrayList<>();
+        List<Long> newPartition = new ArrayList<>();
+        List<Long> newElements = new ArrayList<>();
+
+        for(int i = 0; i < maxIteration; i++){
+            processPartition(partition, elements, partitioner, size);
+            processPartitionNeighbor(partition, newPartition, size);
+            processPartition(newPartition, elements, newElements, size);
+
+            Long partitionerKarmarkar = karmarkarKarp(partitioner);
+            Long newElementsKarmarkar = karmarkarKarp(newElements);
+
+            if(partitionerKarmarkar > newElementsKarmarkar){
+                residue = newElementsKarmarkar;
+                copyElements(newPartition, partition, size);
+            }
+        }
+
 
         return residue;
     }
